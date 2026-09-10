@@ -1,105 +1,126 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Valentine's Day</title>
-    <link rel="icon" href="media\VM1fcpu2bKs1e2Kdbj\love_icon-icons.com_67808.ico" type="image/x-icon"> </head>
-    <script defer src="https://cloud.umami.is/script.js" data-website-id="352c7074-be3e-407a-b40e-f2dd3838fa3f"></script>
+    <title>Sevgililer Günü Daveti</title>
     <style>
         body {
-            background-color: #ffc8fd;
-            font-family: 'Comic Sans MS', cursive;
+            font-family: 'Arial', sans-serif;
+            background-color: #ffe6e8;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            height: 100vh;
+            align-items: center;
+            min-height: 100vh;
             margin: 0;
-        }
-
-        .container {
             text-align: center;
+            padding: 20px;
         }
-
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+        }
         h1 {
-            color: #ff6b6b;
-            font-size: 2.5em;
+            color: #ff4d6d;
+            font-size: 22px;
             margin-bottom: 20px;
         }
-
-        input {
-            padding: 10px;
-            margin: 5px;
-            font-size: 1.2em;
+        .gif img {
+            width: 180px;
             border-radius: 10px;
-            border: none;
+            margin-bottom: 20px;
         }
-
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
         button {
-            padding: 10px 20px;
-            margin-top: 10px;
+            padding: 12px 20px;
+            font-size: 16px;
             border: none;
-            border-radius: 20px;
+            border-radius: 10px;
             cursor: pointer;
-            background-color: #ff6b6b;
-            color: white;
-            font-size: 1.2em;
+            transition: transform 0.2s;
         }
-
-        #generatedLink {
-            margin-top: 15px;
-            font-size: 1.2em;
+        #yesBtn {
+            background-color: #ff4d6d;
+            color: white;
+            font-weight: bold;
+        }
+        #noBtn {
+            background-color: #cccccc;
             color: #333;
         }
-
-        #linkField {
-            width: 80%;
-            padding: 10px;
-            font-size: 1.2em;
-            text-align: center;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            margin-top: 10px;
-            background-color: #f0f0f0;
-            cursor: not-allowed;
-            color: #666;
+        .footer {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #ff6b6b;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <h1>Enter Your Names</h1>
-        <input type="text" id="yourName" placeholder="Your Name">
-        <input type="text" id="baeName" placeholder="Bae's Name">
-        <br>
-        <button onclick="generateLink()">Generate</button>
-        <p id="generatedLink">Share link to your bae:</p>
-        <input type="text" id="linkField" readonly>
-        <br>
-        <button onclick="copyLink()">Copy Link</button>
+        <h1 id="question">Kavgalarımızda kim haklı küçük woffiem (kıyafet dahil)?</h1>
+        
+        <div class="gif">
+            <img id="mainGif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHI1OHR1dDV0eGJuMXdneXhzeDR3azMwcHZ6aWlyOWVsdWNmNHZyNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MDJ9IbxxvDUQM/giphy.gif" alt="Cute Gif">
+        </div>
+
+        <div class="buttons">
+            <button id="yesBtn" onclick="acceptInvitation()">dehşetül vahşet diva balım 💖</button>
+            <button id="noBtn" onclick="handleNo()">küçük mızmız woffie 🐾</button>
+        </div>
+
+        <div class="footer">
+            From: <span id="from">Sana deliler gibi aşık olan sevgilin</span> <br>
+            To: <span id="to">Woffiem</span>
+        </div>
     </div>
 
     <script>
-        function generateLink() {
-            const yourName = document.getElementById('yourName').value;
-            const baeName = document.getElementById('baeName').value;
-            if (yourName && baeName) {
-                const link = `https://vt.shizuka.my.id/valentine.html?from=${encodeURIComponent(yourName)}&to=${encodeURIComponent(baeName)}`;
-                document.getElementById('linkField').value = link;
-                document.getElementById('generatedLink').style.display = 'block';
-            } else {
-                alert('Please enter both names!');
+        // URL'den parametre gelirse al, gelmezse varsayılan Türkçe metinleri koru
+        const urlParams = new URLSearchParams(window.location.search);
+        const fromParam = urlParams.get('from');
+        const toParam = urlParams.get('to');
+
+        if (fromParam) document.getElementById('from').textContent = fromParam;
+        if (toParam) document.getElementById('to').textContent = toParam;
+
+        let noClickCount = 0;
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+
+        function handleNo() {
+            noClickCount++;
+            let currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+            yesBtn.style.fontSize = (currentSize + 6) + 'px';
+            yesBtn.style.padding = (12 + noClickCount * 4) + 'px ' + (20 + noClickCount * 6) + 'px';
+            
+            const noTexts = [
+                "Emin misin? 🥺",
+                "Bir daha düşün bence! 💔",
+                "Gerçekten mi? 😢",
+                "Beni üzüyorsun ama... 🐾",
+                "Son kararın mı?"
+            ];
+            if (noClickCount <= noTexts.length) {
+                noBtn.textContent = noTexts[noClickCount - 1];
             }
         }
 
-        function copyLink() {
-            const linkField = document.getElementById('linkField');
-            navigator.clipboard.writeText(linkField.value).then(() => {
-                alert('Link copied to clipboard!');
-            }).catch(err => {
-                console.error('Failed to copy: ', err);
-            });
+        function acceptInvitation() {
+            document.getElementById('question').textContent = "Biliyordum! Seni çok seviyorum! ❤️✨";
+            document.getElementById('mainGif').src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbm93aTV2MWJxdWVndm91OWVpNmFwcmIxeTlndTRpYWJmOWx4azV2eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/G6FSC6XYA160/giphy.gif";
+            document.querySelector('.buttons').style.display = 'none';
         }
     </script>
 
