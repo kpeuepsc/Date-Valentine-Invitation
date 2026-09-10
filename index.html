@@ -73,6 +73,7 @@
         </div>
         <div class="buttons">
             <button id="yesBtn">dehşetül vahşet diva balın 🌸</button>
+            <p id="noMessage" style="color: #ff6b6b; font-size: 1.5em; height: 30px; margin: 10px 0; font-weight: bold;"></p>
             <button id="noBtn">küçük mızmız woffie 💝</button>
         </div>
     </div>
@@ -94,8 +95,9 @@
         let yesBtnSize = 1;
         let noBtnSize = 1;
 
-        const noTexts = [
-    "esegi dinleme esek yalanci",
+        const noMessage = document.getElementById('noMessage');
+const noTexts = [
+       "esegi dinleme esek yalanci",
     "tm mi.😠",
     "askim butonlari karistirdin dikkatli oku😒",
     "kizgin inek😠",
@@ -103,6 +105,18 @@
     "gidip tek basima ml mi oynayayim üşüye üşüye🙂🎀"
 ];
 let noClickCount = 0;
+
+noBtn.addEventListener('click', () => {
+    yesBtnSize *= 1.25;
+    yesBtn.style.transform = `scale(${yesBtnSize})`;
+    noBtnSize -= 0.1;
+    noBtn.style.transform = `scale(${noBtnSize})`;
+
+    if (noClickCount < noTexts.length) {
+        noMessage.textContent = noTexts[noClickCount];
+        noClickCount++;
+    }
+});
 
 noBtn.addEventListener('click', () => {
     yesBtnSize *= 1.25;
